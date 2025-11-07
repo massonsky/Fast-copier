@@ -84,6 +84,7 @@ find_package(fmt CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 find_package(CLI11 CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
+find_package(xxHash CONFIG REQUIRED)
 
 if(NOT TARGET spdlog::spdlog AND TARGET spdlog::spdlog_header_only)
 	add_library(spdlog::spdlog ALIAS spdlog::spdlog_header_only)
@@ -101,10 +102,12 @@ target_link_libraries(cclone
 		spdlog::spdlog
 		CLI11::CLI11
 		yaml-cpp::yaml-cpp
+		xxHash::xxhash
 )
 
 file(GLOB_RECURSE FCOPYROVER_SOURCES "src/**/*.cpp")
 list(REMOVE_ITEM FCOPYROVER_SOURCES "${CMAKE_SOURCE_DIR}/src/main.cpp")
+message(STATUS "FCOPYROVER_SOURCES: ${FCOPYROVER_SOURCES}")
 
 add_executable(fcopyrover src/main.cpp ${FCOPYROVER_SOURCES})
 target_link_libraries(fcopyrover PRIVATE cclone)

@@ -3,20 +3,23 @@
 #include <fmt/ranges.h>
 
 #include "infra/config/config.hpp"
+#include "infra/error_handler/error.hpp"
+#include "infra/interrupt.hpp"
 #include "cli/args_parser/args_parser.hpp"
 #include <git_info.hpp>
 #include <spdlog/spdlog.h>
 
-using __GIT = cclone::build_info::GitInfo;
-using __GIT_VERSE = cclone::build_info::GitInfo;
+using GIT = cclone::build_info::GitInfo;
+using ARGS = cclone::args_parser::CLIArgs;
+using GIT_VERSE = cclone::build_info::GitInfo;
 
-constexpr auto __load_from_cli = cclone::infra::config_from_cli;
-constexpr auto __load_config_file = cclone::infra::load_config_from_file;
+constexpr auto load_from_cli = cclone::infra::config_from_cli;
+constexpr auto load_config_file = cclone::infra::load_config_from_file;
 constexpr auto args_parser = cclone::args_parser::parse_args;
 constexpr auto git =  cclone::build_info::get_git_info();
 [[nodiscard]] 
 static auto 
-__out_git_verse(const __GIT& git) 
+__out_git_verse(const GIT& git) 
 -> void {
     fmt::print("Git branch: {}\n", git.branch);
     fmt::print("Git commit: {}\n", git.commit);
@@ -27,7 +30,7 @@ __out_git_verse(const __GIT& git)
 
 [[nodiscard]] 
 static auto 
-__out_args_verse(const cclone::args_parser::CLIArgs& args) 
+__out_args_verse(const ARGS& args) 
 -> void {
     fmt::print("Arguments:\n");
     fmt::print("Sources: {}\n", args.sources); // fmt::print поддерживает vector<string> из коробки!
@@ -44,6 +47,17 @@ __out_args_verse(const cclone::args_parser::CLIArgs& args)
 
 int main(int argc, char** argv)
 {
+    spdlog::set_level(spdlog::level::info);
+    spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%l] %v");
+
+    cclone::infra::install_signal_handler();
+    
+    if (cclone::infra::is_interrupted()) {
+        spdlog::warn("Interrupted during startup");
+        return 130;
+    }
+
+    
     auto args_opt = args_parser(argc, argv);
     if (!args_opt) {
         return 1; // --help или ошибка
@@ -51,7 +65,7 @@ int main(int argc, char** argv)
     const auto& args = *args_opt;
     
     // 1. Загрузить из файла
-    auto config_res = __load_config_file();
+    auto config_res = load_config_file();
     if (!config_res) {
         spdlog::error("Config error: {}", config_res.error());
         return 1;
@@ -59,7 +73,7 @@ int main(int argc, char** argv)
     auto config = config_res.value();
 
     // 2. Переопределить из CLI
-    auto cli_config = __load_from_cli(args);
+    auto cli_config = load_from_cli(args);
     config.merge_with(cli_config); // CLI имеет приоритет
     __out_git_verse(git);
     __out_args_verse(args);

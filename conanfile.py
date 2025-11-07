@@ -16,6 +16,7 @@ class CcloneRecipe(ConanFile):
         "yaml-cpp/0.8.0",
         "spdlog/1.13.0",
         "gtest/1.14.0",
+        "xxhash/0.8.2",
     )
 
     def layout(self):
