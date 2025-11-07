@@ -29,8 +29,8 @@ fi
 
 invoke_conan_install() {
   local build_type="$1"
-  local output_folder="$(pwd)/build/conan"
-  echo "[setup_conan] Running 'conan install . --build=missing -s build_type=${build_type} -of ${output_folder}'."
+  local output_folder="$(pwd)"
+  echo "[setup_conan] Running 'conan install . --build=missing -s build_type=${build_type}."
   conan install . --build=missing -s "build_type=${build_type}" -of "${output_folder}"
 }
 

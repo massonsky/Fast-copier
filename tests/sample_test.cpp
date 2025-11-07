@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <internal/git_info.hpp>
+#include <git_info.hpp>
 
 TEST(BuildInfoTest, GitMetadataAvailable)
 {

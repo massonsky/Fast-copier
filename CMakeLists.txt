@@ -70,7 +70,7 @@ endif()
 
 string(TIMESTAMP CCLONE_BUILD_TIMESTAMP "%Y-%m-%dT%H:%M:%SZ" UTC)
 
-set(CCLONE_INTERNAL_INCLUDE_DIR ${CMAKE_BINARY_DIR}/generated/internal)
+set(CCLONE_INTERNAL_INCLUDE_DIR ${CMAKE_BINARY_DIR}/generated/)
 file(MAKE_DIRECTORY ${CCLONE_INTERNAL_INCLUDE_DIR})
 
 configure_file(
@@ -83,6 +83,7 @@ configure_file(
 find_package(fmt CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 find_package(CLI11 CONFIG REQUIRED)
+find_package(yaml-cpp CONFIG REQUIRED)
 
 if(NOT TARGET spdlog::spdlog AND TARGET spdlog::spdlog_header_only)
 	add_library(spdlog::spdlog ALIAS spdlog::spdlog_header_only)
@@ -99,7 +100,14 @@ target_link_libraries(cclone
 		fmt::fmt
 		spdlog::spdlog
 		CLI11::CLI11
+		yaml-cpp::yaml-cpp
 )
+
+file(GLOB_RECURSE FCOPYROVER_SOURCES "src/**/*.cpp")
+list(REMOVE_ITEM FCOPYROVER_SOURCES "${CMAKE_SOURCE_DIR}/src/main.cpp")
+
+add_executable(fcopyrover src/main.cpp ${FCOPYROVER_SOURCES})
+target_link_libraries(fcopyrover PRIVATE cclone)
 
 if(CCLONE_ENABLE_TESTS)
 	enable_testing()
@@ -138,6 +146,10 @@ if(CCLONE_ENABLE_TESTS)
 	add_executable(cclone_tests
 		tests/sample_test.cpp
 	)
+
+	file(GLOB_RECURSE TEST_SOURCES "tests/**/*.cpp")
+	list(REMOVE_ITEM TEST_SOURCES "${CMAKE_SOURCE_DIR}/tests/sample_test.cpp")
+	target_sources(cclone_tests PRIVATE ${TEST_SOURCES})
 
 	target_link_libraries(cclone_tests
 		PRIVATE

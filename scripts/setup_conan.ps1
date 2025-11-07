@@ -14,20 +14,10 @@ function Ensure-ConanProfile {
 }
 
 function Invoke-ConanInstall {
-    param(
-        [string]$BuildType
-    )
+    param([string]$BuildType)
 
-    $outputFolder = Join-Path (Get-Location) "build\conan"
-    $args = @(
-        "install", ".",
-        "--build=missing",
-        "-s", "build_type=$BuildType",
-        "-of", $outputFolder
-    )
-
-    Write-Host "[setup_conan] Running 'conan $($args -join ' ')'."
-    conan @args
+    Write-Host "[setup_conan] Running conan install for $BuildType"
+    conan install . --build=missing -s build_type=$BuildType
 }
 
 Ensure-ConanProfile

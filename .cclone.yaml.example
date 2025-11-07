@@ -1,0 +1,10 @@
+threads: 8
+buffer_size: 4194304  # 4 MB
+recursive: true
+verify: true
+progress: true
+exclude:
+  - "*.tmp"
+  - "node_modules/"
+include:
+  - "*.log"
