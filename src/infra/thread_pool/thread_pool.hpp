@@ -10,6 +10,7 @@
 #include <stop_token>
 #include <vector>
 #include <stdexcept>
+#include <atomic>
 
 namespace cclone::infra {
 
@@ -42,6 +43,7 @@ private:
     mutable std::mutex queue_mutex_;
     std::condition_variable_any cv_;
     bool stop_ = false;
+    std::atomic<std::size_t> active_tasks_{0}; // Счётчик активных задач
 };
 
 // =============== Реализация шаблонов ===============
@@ -69,7 +71,12 @@ auto ThreadPool::enqueue_with_future(F&& f, Args&&... args)
     auto future = task->get_future();
     {
         std::lock_guard lock(queue_mutex_);
-        tasks_.emplace([task]() { (*task)(); });
+        active_tasks_.fetch_add(1, std::memory_order_relaxed);
+        tasks_.emplace([task, this]() { 
+            (*task)(); 
+            active_tasks_.fetch_sub(1, std::memory_order_relaxed);
+            cv_.notify_all(); // Уведомляем wait()
+        });
     }
     cv_.notify_one();
     return future;
@@ -79,7 +86,7 @@ auto ThreadPool::enqueue_with_future(F&& f, Args&&... args)
 
 namespace cclone::infra {
 
-ThreadPool::ThreadPool(std::size_t nthreads)
+inline ThreadPool::ThreadPool(std::size_t nthreads)
     : stop_(false)
 {
     if (nthreads == 0) nthreads = 1;
@@ -118,7 +125,7 @@ ThreadPool::ThreadPool(std::size_t nthreads)
     }
 }
 
-ThreadPool::~ThreadPool() {
+inline ThreadPool::~ThreadPool() {
     {
         std::lock_guard lock(queue_mutex_);
         stop_ = true;
@@ -127,10 +134,10 @@ ThreadPool::~ThreadPool() {
     // jthread автоматически вызовет request_stop и join
 }
 
-void ThreadPool::wait() {
+inline void ThreadPool::wait() {
     std::unique_lock lock(queue_mutex_);
     cv_.wait(lock, [this] {
-        return tasks_.empty();
+        return tasks_.empty() && active_tasks_.load(std::memory_order_relaxed) == 0;
     });
 }
 

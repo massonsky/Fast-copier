@@ -3,7 +3,9 @@
         {
             "name": "Win32",
             "configurationProvider": "ms-vscode.cmake-tools",
-            "intelliSenseMode": "windows-msvc-x64"
+            "intelliSenseMode": "windows-msvc-x64",
+            "cStandard": "c23",
+            "cppStandard": "c++26"
         }
     ],
     "version": 4

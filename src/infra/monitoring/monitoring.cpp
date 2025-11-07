@@ -60,9 +60,9 @@ void ProgressMonitor::start_rendering_thread_() {
 
 void ProgressMonitor::stop_rendering_thread_() {
     shutdown_.store(true);
-    if (render_thread_->joinable()) {
+    if (render_thread_) {
         render_thread_->request_stop();
-        render_thread_->join();
+        // jthread автоматически join() в деструкторе, не вызываем вручную
     }
 }
 

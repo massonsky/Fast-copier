@@ -17,6 +17,7 @@ class CcloneRecipe(ConanFile):
         "spdlog/1.13.0",
         "gtest/1.14.0",
         "xxhash/0.8.2",
+        "liburing/2.7" if settings.os == "Linux" else None,
     )
 
     def layout(self):

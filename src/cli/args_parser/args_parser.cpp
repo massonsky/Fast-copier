@@ -66,6 +66,12 @@ namespace cclone::args_parser {
             "Resume interrupted copy operations"
         );
 
+        app.add_flag(
+            "--no-preserve-metadata",
+            args.preserve_metadata,
+            "Do not preserve file metadata (timestamps, permissions)"
+        )->transform(CLI::Transformer(std::map<std::string, bool>{{"", false}}));
+
         // Parameters
         app.add_option(
             "--threads",
@@ -94,6 +100,9 @@ namespace cclone::args_parser {
 
         /// Postprocessing: invert progress flag
         args.progress = !args.progress;
+        
+        /// Postprocessing: invert preserve_metadata flag
+        args.preserve_metadata = !args.preserve_metadata;
 
         return args;
     }

@@ -1,5 +1,93 @@
-/build
-/vcpkg_installed
+# ============================================================================
+# FCopyRover .gitignore
+# ============================================================================
 
+# Build directories
+/build/
+/out/
+/cmake-build-*/
 
+# Dependency managers
+/vcpkg_installed/
+/.conan/
+
+# Generated files
+*.autosave
+*~
+
+# IDE and editors
+.vscode/
+.vs/
+.idea/
+*.swp
+*.swo
+*.user
+*.suo
+*.ncb
+*.aps
+*.cbTemp
+.DS_Store
+
+# Compiled Object files
+*.o
+*.obj
+*.elf
+*.ilk
+*.map
+*.exp
+*.gch
+*.pch
+*.lib
+*.a
+*.la
+*.lo
+*.dll
+*.so
+*.dylib
+*.exe
+*.out
+*.app
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Testing
+/test-data-*/
+/Testing/
+/CTestTestfile.cmake
+
+# FCopyRover specific
 .cclone.yaml
+.cclone.resume
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Package files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip

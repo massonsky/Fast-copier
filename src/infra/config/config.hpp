@@ -26,6 +26,7 @@ struct Config {
     bool resume = false;
     bool progress = true;
     bool quiet = false;
+    bool preserve_metadata = true; // По умолчанию сохраняем метаданные
 
     // Paths
     std::vector<std::string> exclude_patterns;

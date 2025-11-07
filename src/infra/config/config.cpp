@@ -25,6 +25,7 @@ namespace cclone::infra {
         if (other.resume) resume = true;
         if (!other.progress) progress = false; // CLI может отключить
         if (other.quiet) quiet = true;
+        if (!other.preserve_metadata) preserve_metadata = false; // CLI может отключить
 
         if (!other.exclude_patterns.empty()) exclude_patterns = other.exclude_patterns;
         if (!other.include_patterns.empty()) include_patterns = other.include_patterns;
@@ -111,6 +112,7 @@ namespace cclone::infra {
         cfg.resume = args.resume;
         cfg.progress = args.progress;
         cfg.quiet = args.quiet;
+        cfg.preserve_metadata = args.preserve_metadata;
         // include/exclude можно добавить позже
         return cfg;
     }

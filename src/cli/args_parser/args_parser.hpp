@@ -18,6 +18,7 @@ namespace cclone::args_parser {
     bool progress{false};                   // --progress
     bool quiet{false};                      // -q, --quiet
     bool resume{false};                     // --resume
+    bool preserve_metadata{true};           // --preserve-metadata / --no-preserve-metadata
     std::optional<std::uint32_t> threads;   // --threads=N
     std::optional<std::size_t> buffer_size; // --buffer-size=SIZE
     bool help{false};                       // -h, --help (autogeneration CLI11)

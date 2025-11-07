@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <expected>
+#include <atomic>
 #include "../../infra/config/config.hpp"
 #include "../../infra/error_handler/error.hpp"
 #include "../../infra/monitoring/monitoring.hpp"
@@ -11,11 +12,31 @@
 
 namespace cclone::core {
 
-struct CopyStats {
+struct CopyFileResult {
+    bool copied = true; // true если файл скопирован, false если пропущен
+};
+
+struct CopyStatsSnapshot {
     std::uint64_t files_copied = 0;
     std::uint64_t bytes_copied = 0;
     std::uint64_t files_skipped = 0;
     std::uint64_t errors = 0;
+};
+
+struct CopyStats {
+    std::atomic<std::uint64_t> files_copied{0};
+    std::atomic<std::uint64_t> bytes_copied{0};
+    std::atomic<std::uint64_t> files_skipped{0};
+    std::atomic<std::uint64_t> errors{0};
+    
+    // Конструктор по умолчанию
+    CopyStats() = default;
+    
+    // Запрещаем копирование и перемещение (из-за atomic)
+    CopyStats(const CopyStats&) = delete;
+    CopyStats& operator=(const CopyStats&) = delete;
+    CopyStats(CopyStats&&) = delete;
+    CopyStats& operator=(CopyStats&&) = delete;
 };
 
 class CopyEngine {
@@ -25,7 +46,7 @@ public:
 
     [[nodiscard]] auto run(const std::vector<std::filesystem::path>& sources,
                            const std::filesystem::path& destination)
-        -> std::expected<CopyStats, infra::Error>;
+        -> std::expected<CopyStatsSnapshot, infra::Error>;
 
 private:
     const infra::Config& config_;
@@ -34,7 +55,7 @@ private:
     // Внутренние методы
     void copy_directory(const std::filesystem::path& src_dir,
                         const std::filesystem::path& dst_dir);
-    std::expected<void, infra::Error> copy_file(const std::filesystem::path& src,
+    std::expected<CopyFileResult, infra::Error> copy_file(const std::filesystem::path& src,
                                                 const std::filesystem::path& dst);
     std::expected<void, infra::Error> copy_chunked(const std::filesystem::path& src,
                                                    const std::filesystem::path& dst);
