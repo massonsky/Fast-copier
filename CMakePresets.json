@@ -1,0 +1,82 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "conan-debug",
+      "displayName": "Conan Toolchain - Debug",
+      "binaryDir": "${sourceDir}/build/conan/Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/conan/generators/conan_toolchain.cmake"
+      }
+    },
+    {
+      "name": "conan-release",
+      "displayName": "Conan Toolchain - Release",
+      "binaryDir": "${sourceDir}/build/conan/Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/conan/generators/conan_toolchain.cmake"
+      }
+    },
+    {
+      "name": "vcpkg-debug",
+      "displayName": "vcpkg Toolchain - Debug",
+      "binaryDir": "${sourceDir}/build/vcpkg/Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+      }
+    },
+    {
+      "name": "vcpkg-release",
+      "displayName": "vcpkg Toolchain - Release",
+      "binaryDir": "${sourceDir}/build/vcpkg/Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "conan-debug",
+      "configurePreset": "conan-debug"
+    },
+    {
+      "name": "conan-release",
+      "configurePreset": "conan-release"
+    },
+    {
+      "name": "vcpkg-debug",
+      "configurePreset": "vcpkg-debug"
+    },
+    {
+      "name": "vcpkg-release",
+      "configurePreset": "vcpkg-release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "conan-debug",
+      "configurePreset": "conan-debug"
+    },
+    {
+      "name": "conan-release",
+      "configurePreset": "conan-release"
+    },
+    {
+      "name": "vcpkg-debug",
+      "configurePreset": "vcpkg-debug"
+    },
+    {
+      "name": "vcpkg-release",
+      "configurePreset": "vcpkg-release"
+    }
+  ]
+}

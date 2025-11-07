@@ -1,0 +1,10 @@
+{
+    "version": 4,
+    "vendor": {
+        "conan": {}
+    },
+    "include": [
+        "build/conan/generators/CMakePresets.json",
+        "build/conan/build/conan/generators/CMakePresets.json"
+    ]
+}

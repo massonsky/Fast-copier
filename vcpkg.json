@@ -1,0 +1,12 @@
+{
+  "name": "cclone",
+  "version-string": "0.1.0",
+  "description": "High-performance CLI file copy tool with modular architecture.",
+  "dependencies": [
+    "cli11",
+    "fmt",
+    "spdlog",
+    "gtest"
+  ],
+  "builtin-baseline": "195276f71622bc41392db5c5c5c5141c95ff9a36"
+}

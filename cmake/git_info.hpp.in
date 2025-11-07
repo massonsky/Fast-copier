@@ -1,0 +1,14 @@
+#pragma once
+
+#include <string_view>
+
+namespace cclone::build_info {
+
+inline constexpr std::string_view git_branch{"@CCLONE_GIT_BRANCH@"};
+inline constexpr std::string_view git_commit{"@CCLONE_GIT_COMMIT@"};
+inline constexpr std::string_view git_commit_short{"@CCLONE_GIT_COMMIT_SHORT@"};
+inline constexpr std::string_view git_tag{"@CCLONE_GIT_TAG@"};
+inline constexpr std::string_view git_dirty_token{"@CCLONE_GIT_DIRTY@"};
+inline constexpr std::string_view build_timestamp_utc{"@CCLONE_BUILD_TIMESTAMP@"};
+
+} // namespace build_info
