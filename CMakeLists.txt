@@ -70,9 +70,12 @@ endif()
 
 string(TIMESTAMP CCLONE_BUILD_TIMESTAMP "%Y-%m-%dT%H:%M:%SZ" UTC)
 
+set(CCLONE_INTERNAL_INCLUDE_DIR ${CMAKE_BINARY_DIR}/generated/internal)
+file(MAKE_DIRECTORY ${CCLONE_INTERNAL_INCLUDE_DIR})
+
 configure_file(
-	${CMAKE_SOURCE_DIR}/cmake/git_info.hpp.in
-	${CMAKE_BINARY_DIR}/generated/git_info.hpp
+	${CMAKE_SOURCE_DIR}/internal/git_info.hpp.in
+	${CCLONE_INTERNAL_INCLUDE_DIR}/git_info.hpp
 	@ONLY
 )
 

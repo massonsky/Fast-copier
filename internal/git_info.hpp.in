@@ -9,6 +9,7 @@ inline constexpr std::string_view git_commit{"@CCLONE_GIT_COMMIT@"};
 inline constexpr std::string_view git_commit_short{"@CCLONE_GIT_COMMIT_SHORT@"};
 inline constexpr std::string_view git_tag{"@CCLONE_GIT_TAG@"};
 inline constexpr std::string_view git_dirty_token{"@CCLONE_GIT_DIRTY@"};
+inline constexpr bool git_dirty = git_dirty_token == "true";
 inline constexpr std::string_view build_timestamp_utc{"@CCLONE_BUILD_TIMESTAMP@"};
 
-} // namespace build_info
+} // namespace cclone::build_info
